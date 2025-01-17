@@ -24,11 +24,11 @@ app.post("/todos", async (req, res) => {
   }
 });
 
-// get all todos
+// get all todos , ASC ORDER
 
 app.get("/todos", async (req, res) => {
   try {
-    const allTodos = await pool.query("SELECT * FROM todo");
+    const allTodos = await pool.query("SELECT * FROM todo ORDER BY todo_id ASC;");
     res.json(allTodos.rows);
   } catch (err) {
     console.log(err.message);
@@ -66,15 +66,17 @@ app.put("/todos/:id", async (req, res) => {
 });
 
 // delete a todo
- 
+
 app.delete("/todos/:id", async (req, res) => {
-    try {
-        const {id} = req.params;
-        const deleteTodo = await pool.query("DELETE FROM todo WHERE todo_id = $1", [id]);
-        res.json("Todo was deleted");
-    } catch (err) {
-        console.log(err.message);
-    }
+  try {
+    const { id } = req.params;
+    const deleteTodo = await pool.query("DELETE FROM todo WHERE todo_id = $1", [
+      id,
+    ]);
+    res.json("Todo was deleted");
+  } catch (err) {
+    console.log(err.message);
+  }
 });
 
 app.listen(5000, () => {
